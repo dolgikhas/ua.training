@@ -31,10 +31,6 @@
 				<h4><a href="/create_report"><locale:message code="index.create_report"/></a></h4>
 			</sec:authorize>
 			
-			<sec:authorize access="hasRole('ROLE_ADMIN')">
-				<h4><a href="/admin"><locale:message code="admin.title"/></a></h4>
-			</sec:authorize>
-			
 			<sec:authorize access="isAuthenticated()">
 				<h4><a href="/statistic_reports"><locale:message code="index.statistic_reports"/></a></h4>
 				<h4><a href="/logout"><locale:message code="index.logout"/></a></h4>

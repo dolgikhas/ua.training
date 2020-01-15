@@ -30,14 +30,24 @@ public class UserService implements UserDetailsService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String username)
+    			throws UsernameNotFoundException {
+//        User user = userRepository.findByUsername(username);
+//
+//        if (user == null) {
+//            throw new UsernameNotFoundException("User not found");
+//        }
+//
+//        return user;
+    	
+    	Optional<User> optionalUser = Optional.of(
+    					userRepository.findByUsername( username ) );
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
+		if ( !optionalUser.isPresent() ) {
+			throw new UsernameNotFoundException( "User not found" );
+		}
 
-        return user;
+		return optionalUser.get();
     }
 
     public User findUserById(Long userId) {
