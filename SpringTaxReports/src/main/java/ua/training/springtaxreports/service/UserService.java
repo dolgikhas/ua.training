@@ -3,10 +3,13 @@ package ua.training.springtaxreports.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,15 +34,8 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username)
-    			throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username);
-//
-//        if (user == null) {
-//            throw new UsernameNotFoundException("User not found");
-//        }
-//
-//        return user;
-    	
+    			throws UsernameNotFoundException
+    {    	
     	Optional<User> optionalUser = Optional.of(
     					userRepository.findByUsername( username ) );
 
@@ -84,4 +80,38 @@ public class UserService implements UserDetailsService {
         return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
                 .setParameter("paramId", idMin).getResultList();
     }
+    
+	public static String getCurrentUserId() {
+		User user = (User) SecurityContextHolder.getContext()
+												.getAuthentication()
+												.getPrincipal();
+	    return user.getUsername();		
+	}
+	
+	public String getController( String prevController ) {
+		String		controller = null;
+		List<User> listUsers = userRepository.findAll();
+		for ( User user : listUsers ) {
+			Set<Role> setRoles = user.getRoles();
+			for ( Role role : setRoles )
+				if ( role.getName().equals( "ROLE_ADMIN" ) &&
+						!user.getUsername().equals(prevController) ) {
+					controller = user.getUsername();
+					return controller;
+				}
+
+		}
+		return controller;
+	}
+	
+	public static boolean userHasRole( String role )
+	{
+		for ( GrantedAuthority authority : SecurityContextHolder.getContext()
+					.getAuthentication().getAuthorities()) {
+	        if ( role.equals( authority.getAuthority() ) )
+	        	return true;
+		}
+
+	    return false;
+	}
 }

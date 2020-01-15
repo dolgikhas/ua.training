@@ -2,6 +2,7 @@ package ua.training.springtaxreports.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +33,6 @@ import ua.training.springtaxreports.service.UserService;
 	@GetMapping( "/create_report" )
 	public String main( Model model )
 	{
-
         model.addAttribute("taxReportForm", new TaxReport() );
 
 		return "create_report";		
@@ -61,8 +62,18 @@ import ua.training.springtaxreports.service.UserService;
 									   Integer reportId,
 									   Model model )
 	{
-		TaxReport taxReport = taxReportRepository
-								.findTaxReportById(reportId );
+//		TaxReport taxReport = taxReportRepository
+//								.findTaxReportById(reportId );
+    	Optional<TaxReport> optionalTaxReport = Optional.of(
+    			taxReportRepository.findTaxReportById( reportId ) );
+
+		if ( !optionalTaxReport.isPresent() ) {
+			throw new RuntimeException( "TaxReport with id: "
+					+ reportId + " not found" );
+		}
+		
+		TaxReport taxReport = optionalTaxReport.get();
+
 		model.addAttribute( "taxReportForm", taxReport );
 		model.addAttribute( "command", "correct" );
 		
