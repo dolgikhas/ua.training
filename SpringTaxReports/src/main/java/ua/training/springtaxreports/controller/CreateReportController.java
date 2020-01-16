@@ -28,7 +28,7 @@ import ua.training.springtaxreports.service.UserService;
 	@Autowired
 	TaxReportRepository taxReportRepository;
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 	
 	@GetMapping( "/create_report" )
 	public String main( Model model )
@@ -50,7 +50,8 @@ import ua.training.springtaxreports.service.UserService;
         
 		// TODO: check values, inputed by USER
 		taxReport.setStatus( "on_review" );
-		taxReport.setController( getController( "" ) );
+		taxReport.setController( userService.getController( "" ) );
+		taxReport.setOwner( UserService.getCurrentUserId() );
 
 		taxReportRepository.save( taxReport );
 
@@ -62,8 +63,6 @@ import ua.training.springtaxreports.service.UserService;
 									   Integer reportId,
 									   Model model )
 	{
-//		TaxReport taxReport = taxReportRepository
-//								.findTaxReportById(reportId );
     	Optional<TaxReport> optionalTaxReport = Optional.of(
     			taxReportRepository.findTaxReportById( reportId ) );
 
@@ -99,20 +98,5 @@ import ua.training.springtaxreports.service.UserService;
 		taxReportRepository.save( taxReport );
 		
 		return "redirect:/statistic_reports";
-	}
-
-	private String getController( String prevController ) {
-		String		controller = null;
-		List<User> listUsers = userRepository.findAll();
-		for ( User user : listUsers ) {
-			Set<Role> setRoles = user.getRoles();
-			for ( Role role : setRoles )
-				if ( role.getName().equals( "ROLE_ADMIN" ) &&
-						!user.getUsername().equals(prevController) ) {
-					controller = user.getUsername();
-					break;
-				}
-		}
-		return controller;
 	}
 }

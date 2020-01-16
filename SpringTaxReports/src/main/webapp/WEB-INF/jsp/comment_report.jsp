@@ -14,34 +14,25 @@
 	          class="box login">	 
 		<fieldset class="boxBody">	 
 		<span style="float: right">
-			<a href="?lang=en">en</a>
-			<a href="?lang=ua">ua</a>
-		<!--
-		    <c:if test="${command == 'correct' }">
-			    <a href="?lang=en&reportId=${id}">en</a>
-				<a href="?lang=ua&reportId=${id}">ua</a>
-		    </c:if>
-		    <c:if test="${command != 'correct' }">
-			    <a href="?lang=en">en</a>
-				<a href="?lang=ua">ua</a>
-			</c:if>
-		-->
+			<input type="button" value="en" onClick='location.href="?lang=en"'/>
+			<input type="button" value="ua" onClick='location.href="?lang=ua"'/>			  
 	    </span>
 	</form:form>
 	<form method="POST">
 		<h2><locale:message code="comment_report.title"/><br></h2>
-		
 		<div>
 			<input type="hidden" name="id" value="${id}" /> 
 		
 			<label><locale:message code="comment_report.label"/></label><br>
 			<input name="comment" type="text" autofocus="true"/><br>
 
-			<button type="submit"><locale:message code="comment_report.button" /></button>
+			<button type="submit"><locale:message code="comment_report.button" /></button><br>
 		</div>
 	</form>
     
-    <a href="/"><locale:message code="index.title"/></a>
+    <!--	<a href="/"><locale:message code="index.title"/></a>	-->
+    <input type="button" value=<locale:message code="index.title"/>
+		onClick='location.href="/"'/><br>    
 </div>
 </body>
 </html>

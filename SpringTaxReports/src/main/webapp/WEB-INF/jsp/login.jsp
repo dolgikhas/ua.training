@@ -10,12 +10,35 @@
 </head>
 
 <body>
+	<!--
+	<script>
+		alert( 'Привет, мир!' );
+	</script>
+
+	<!--
+	<style>
+	.button {
+	  display: inline-block;
+	  font-size: 18px;
+	  cursor: pointer;
+	  text-align: center;
+	  text-decoration: none;
+	  outline: none;
+	  color: #fff;
+	  background-color: #e7e7e7; color: black; /* Gray */
+	  border: 1px solid #555555; /* Black */
+	  border-radius: 12px;
+	  width: 160px;
+	}	
+	</style>
+	-->
+	
 	<form:form method="POST" modelAttribute="userForm" action="change-locale"
 	          class="box login">	 
 		<fieldset class="boxBody">	 
 		<span style="float: right">
-			<a href="?lang=en">en</a>
-			<a href="?lang=ua">ua</a>
+			<input type="button" value="en" onClick='location.href="?lang=en"'/>
+			<input type="button" value="ua" onClick='location.href="?lang=ua"'/>			  
 	    </span>
 	</form:form>
 
@@ -27,11 +50,23 @@
 	  <form method="POST" action="/login">
 	    <h2><locale:message code="login.title"/></h2>
 	    <div>
-	      <input name="username" type="text" placeholder="Username"
-	             autofocus="true"/>
-	      <input name="password" type="password" placeholder="Password"/>
-	      <button type="submit"><locale:message code="login.button"/></button>
-	      <h4><a href="/registration"><locale:message code="login.registration"/></a></h4>
+			<label><locale:message code="login.username"/></label><br>	    
+			<input name="username" type="text" placeholder="Username"
+				autofocus="true"/><br>	
+			<label><locale:message code="login.password"/></label><br>	    
+			<input name="password" type="password" placeholder="Password"/><br>
+			<button type="submit" class="button">
+				<locale:message code="login.button"/></span>
+			</button><br>
+		
+		
+		    <!--	<input type="button" value=<locale:message code="index.registration"/>
+				onClick='location.href="/registration"'/><br>	-->
+			<button type="submit" onClick='location.href="/registration"'
+					class="button">
+				<locale:message code="index.registration"/>
+			</button><br>
+				    
 	    </div>
 	  </form>
 	</div>

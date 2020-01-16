@@ -2,16 +2,12 @@ package ua.training.springtaxreports.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.WebUtils;
 
 import ua.training.springtaxreports.entity.TaxReport;
 import ua.training.springtaxreports.repository.TaxReportRepository;
@@ -23,41 +19,59 @@ public class StatisticReportController {
 	TaxReportRepository taxReportRepository;
     @Autowired
     UserService userService;
-
+    @Value("${taxreport.role.admin}")
+     String ROLE_ADMIN;
+	@Value("${taxreport.role.user}")
+	 String ROLE_USER;
+	@Value("${taxreport.statistic.list.taxreports}")
+	 String LIST_TAX_REPORTS;
+	@Value("${taxreport.statistic.list.number.reports}")
+	 String NUMBER_REPORTS;
+	@Value("${taxreport.statistic.report.id}")
+	 String REPORT_ID;
+	@Value("${taxreport.command.correct}")
+	 String COMMAND_CORRECT;
+	@Value("${taxreport.command.reject}")
+	 String COMMAND_REJECT;
+	@Value("${taxreport.command.change_controller}")
+	 String COMMAND_CHANGE_CONTROLLER;
+	@Value("${taxreport.statistic.command.name}")
+	 String COMMAND_NAME;
+	@Value("${taxreport.statistic.status.on_review}")
+	 String STATUS_ON_REVIEW;
+    
 	@GetMapping( "/statistic_reports" )
-	public String main( Model 	model ) {
-		
+	public String main( Model 	model )
+	{
 		String userId = UserService.getCurrentUserId();
 		
 		List<TaxReport> listReports;
 		
-		if ( UserService.userHasRole( "ROLE_ADMIN" ) ) {
+		if ( UserService.userHasRole( ROLE_ADMIN ) ) {
 			listReports = taxReportRepository
 					.findTaxReportByControllerStatusOnReview( userId );
-		} else if ( UserService.userHasRole( "ROLE_USER" ) ) {
+		} else if ( UserService.userHasRole( ROLE_USER ) ) {
 			listReports = taxReportRepository.findTaxReportByOwner( userId );
 		} else {
 			throw new RuntimeException( "get not expected role!" );
 		}
 		
-		model.addAttribute( "allTaxReports", listReports );
-		model.addAttribute( "number_reports", listReports.size() );
+		model.addAttribute( LIST_TAX_REPORTS, listReports );
+		model.addAttribute( NUMBER_REPORTS, listReports.size() );
 
 		return "statistic_reports";
 	}
 		
 	@PostMapping( "/statistic_reports" )
-	public String submit( @RequestParam(required = true, defaultValue = "" )
-						    Integer reportId,
-						  @RequestParam(required = true, defaultValue = "" )
-							String command,
-							Model 	model ) {
+	public String submit(
+			@RequestParam(required = true, defaultValue = "" ) Integer reportId,
+			@RequestParam(required = true, defaultValue = "" ) String command,
+			 Model 	model )
+	{
 		
 		// TODO: check parameters
-		if ( command.equals( "" ) )
-		{
-			main( model );
-			return "statistic_reports";
+		if ( command.equals( "" ) ){
+			return "redirect:/statistic_reports";
 		}
 		
     	Optional<TaxReport> optionalTaxReport = Optional.of(
@@ -68,46 +82,41 @@ public class StatisticReportController {
 		}		
 		TaxReport taxReport = optionalTaxReport.get();
 	
-		// TODO: replace "constant" to variable
-		if ( UserService.userHasRole( "ROLE_ADMIN" ) )
+		if ( UserService.userHasRole( ROLE_ADMIN ) )
 		{
 			taxReport.setStatus( command );			
 			taxReportRepository.save( taxReport );
 			
-			if ( command.equals( "correct" ) || command.equals( "reject" ) ) {				
+			if ( command.equals( COMMAND_CORRECT ) ||
+				 command.equals( COMMAND_REJECT ) ) {				
 				return "redirect:/comment_report/" + reportId;
 			}
 		}
-		// TODO: replace "constant" to variable
-		else if ( UserService.userHasRole( "ROLE_USER" ) )
+		else if ( UserService.userHasRole( ROLE_USER ) )
 		{
-			if ( command.equals( "correct" )  ) {
-				// TODO: replace "constants" to variable
-				model.addAttribute( "command", command );
-				model.addAttribute( "reportId", reportId );
+			if ( command.equals( COMMAND_CORRECT )  ) {
+				model.addAttribute( COMMAND_NAME, command );
+				model.addAttribute( REPORT_ID, reportId );
 
 				return "redirect:/correct_report/" + reportId;
 			}
-			// TODO: replace "constant" to variable
-			else if ( command.equals( "change_controller" )) {
-
-				taxReport.setController( userService.getController(
-						taxReport.getController() ) );
-				taxReport.setStatus( "on_review" );
+			else if ( command.equals( COMMAND_CHANGE_CONTROLLER ) ) {
+				taxReport.setController(
+					userService.getController( taxReport.getController() ) );
+				taxReport.setStatus( STATUS_ON_REVIEW );
 				taxReportRepository.save( taxReport );
 			}
 		}
-		
-		main( model );
-		
-		return "statistic_reports";		
+				
+		return "redirect:/statistic_reports";
 	}
 	
 	@GetMapping( "/comment_report/{reportId}" )
-	public String startCommentReport( @PathVariable("reportId") Integer reportId,
-									   Model model )
+	public String startCommentReport(
+			@PathVariable( "reportId" ) Integer reportId,
+			 Model model )
 	{		
-		model.addAttribute( "reportId", reportId );
+		model.addAttribute( REPORT_ID, reportId );
 
 		return "comment_report";		
 	}

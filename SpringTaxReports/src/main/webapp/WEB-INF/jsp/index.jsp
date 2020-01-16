@@ -15,25 +15,40 @@
 	           class="box login">	 
 	  		<fieldset class="boxBody">	 
 		    <span style="float: right">
-			    <a href="?lang=en">en</a>
-			    <a href="?lang=ua">ua</a>
+				<input type="button" value="en" onClick='location.href="?lang=en"'/>
+				<input type="button" value="ua" onClick='location.href="?lang=ua"'/>			  
 	    	</span>
 	    </form:form>
 
 		<div>
 			<h3>${pageContext.request.userPrincipal.name}</h3>
 			<sec:authorize access="!isAuthenticated()">
+			<!--
 				<h4><a href="/login"><locale:message code="index.login"/></a></h4>
 				<h4><a href="/registration"><locale:message code="index.registration"/></a></h4>
+			-->
+			    <input type="button" value=<locale:message code="index.login"/>
+			    		onClick='location.href="/login"'/><br>    
+			    <input type="button" value=<locale:message code="index.registration"/>
+			    		onClick='location.href="/registration"'/><br>
 			</sec:authorize>			
 			
 			<sec:authorize access="hasRole('ROLE_USER')">
-				<h4><a href="/create_report"><locale:message code="index.create_report"/></a></h4>
+				<!--	<h4><a href="/create_report">
+					<locale:message code="index.create_report"/></a></h4>	-->
+				<input type="button" value=<locale:message code="index.create_report"/>
+			    		onClick='location.href="/create_report"'/><br> 
 			</sec:authorize>
 			
 			<sec:authorize access="isAuthenticated()">
+			<!--
 				<h4><a href="/statistic_reports"><locale:message code="index.statistic_reports"/></a></h4>
 				<h4><a href="/logout"><locale:message code="index.logout"/></a></h4>
+			-->
+				<input type="button" value=<locale:message code="index.statistic_reports"/>
+			    		onClick='location.href="/statistic_reports"'/><br> 
+				<input type="button" value=<locale:message code="index.logout"/>
+			    		onClick='location.href="/logout"'/><br> 
 			</sec:authorize>
 			
 		</div>

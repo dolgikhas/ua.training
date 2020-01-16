@@ -15,8 +15,8 @@
 	      class="box login">	 
 	 	<fieldset class="boxBody">	 
 	    <span style="float: right">
-		    <a href="?lang=en">en</a>
-		    <a href="?lang=ua">ua</a>
+			<input type="button" value="en" onClick='location.href="?lang=en"'/>
+			<input type="button" value="ua" onClick='location.href="?lang=ua"'/>			  
 	   	</span>
 	</form:form>
 	<div>
@@ -39,7 +39,9 @@
 			</div>
 	    	<button type="submit"><locale:message code="registration.button"/></button>
 		</form:form>
-		<a href="/"><locale:message code="index.title"/></a>
+	    <!--	<a href="/"><locale:message code="index.title"/></a>	-->
+	    <input type="button" value=<locale:message code="index.title"/>
+			onClick='location.href="/"'/><br>    
 	</div>
 </body>
 </html>

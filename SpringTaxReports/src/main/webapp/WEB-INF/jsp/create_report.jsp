@@ -20,18 +20,8 @@
 	          class="box login">	 
 		<fieldset class="boxBody">	 
 		<span style="float: right">
-		<!--
-			<a href="?lang=en">en</a>
-			<a href="?lang=ua">ua</a>
-		-->
-		    <c:if test="${command == 'correct' }">
-			    <a href="?lang=en&reportId=${id}">en</a>
-				<a href="?lang=ua&reportId=${id}">ua</a>
-		    </c:if>
-		    <c:if test="${command != 'correct' }">
-			    <a href="?lang=en">en</a>
-				<a href="?lang=ua">ua</a>
-			</c:if>
+			<input type="button" value="en" onClick='location.href="?lang=en"'/>
+			<input type="button" value="ua" onClick='location.href="?lang=ua"'/>			  
 	    </span>
 	</form:form>
 	<form:form method="POST"  modelAttribute="taxReportForm" >
@@ -43,7 +33,7 @@
 		</c:if>
 		
 		<div>
-			<form:input type="hidden" path="id" value="${id}"></form:input><br>
+			<form:input type="hidden" path="id" value="${id}"></form:input>
 			
 			<label><locale:message code="create_report.pib"/></label><br>
 			<form:input type="text" path="pib" autofocus="true"></form:input><br>
@@ -80,7 +70,7 @@
 			<form:input type="text" path="taxincome" value="${taxincome}"></form:input><br>
 
 			<form:input type="hidden" path="controller" value="${controller}"></form:input><br>
-			<form:input type="hidden" path="owner" value="${owner}"></form:input><br>
+			<form:input type="hidden" path="owner" value="${owner}"></form:input>
 
 			<form method ="POST" action="save_report">
 				<input type="hidden" name="action" value="save_report"/>
@@ -94,7 +84,8 @@
 		</div>
 	</form:form>
     
-    <a href="/"><locale:message code="index.title"/></a>
+     <input type="button" value=<locale:message code="index.title"/>
+		onClick='location.href="/"'/><br>    
 </div>
 </body>
 </html>
