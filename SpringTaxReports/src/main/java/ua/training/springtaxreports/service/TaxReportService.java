@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import ua.training.model.NoTaxReportException;
+import ua.training.springtaxreports.model.NoTaxReportException;
 import ua.training.springtaxreports.entity.TaxReport;
 import ua.training.springtaxreports.repository.TaxReportRepository;
 
@@ -94,16 +94,7 @@ public class TaxReportService {
 	}
 
 	public List<TaxReport> getReportByOwner( String userId ) {
-//    	Optional<List<TaxReport>> optionalTaxReport = Optional.of(
-//    			taxReportRepository.findTaxReportByOwner( userId ) );
-//
-//		if ( !optionalTaxReport.isPresent() ) {
-//			throw new RuntimeException( "TaxReport by owner: " + userId
-//					+ " not found!" );
-//		}
-//		
-//		return optionalTaxReport.get();
-		return taxReportRepository.findTaxReportByOwner( userId );
+		return taxReportRepository.findListTaxReportsByOwner( userId );
 	}
 
 	public boolean addCommentToTaxReport( Integer reportId, String comment )

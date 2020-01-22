@@ -12,7 +12,7 @@ import ua.training.springtaxreports.entity.TaxReport;
 public interface TaxReportRepository extends CrudRepository<TaxReport, Long> {
 
     @Query(value = "select * from t_taxreport where owner = :owner", nativeQuery = true)
-    List<TaxReport> findTaxReportByOwner( @Param("owner") String owner );
+    List<TaxReport> findListTaxReportsByOwner( @Param("owner") String owner );
     
     @Query(value = "select * from t_taxreport where "
     		+ "controller = :controller and status = 'on_review'",

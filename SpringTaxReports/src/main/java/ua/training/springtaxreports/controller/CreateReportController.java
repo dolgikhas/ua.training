@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import ua.training.model.NoTaxReportException;
+import ua.training.springtaxreports.model.NoTaxReportException;
 import ua.training.springtaxreports.entity.Role;
 import ua.training.springtaxreports.entity.TaxReport;
 import ua.training.springtaxreports.entity.User;
