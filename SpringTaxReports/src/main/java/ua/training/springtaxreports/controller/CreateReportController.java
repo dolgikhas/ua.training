@@ -16,87 +16,89 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import ua.training.model.NoTaxReportException;
 import ua.training.springtaxreports.entity.Role;
 import ua.training.springtaxreports.entity.TaxReport;
 import ua.training.springtaxreports.entity.User;
 import ua.training.springtaxreports.repository.TaxReportRepository;
 import ua.training.springtaxreports.repository.UserRepository;
+import ua.training.springtaxreports.service.TaxReportService;
 import ua.training.springtaxreports.service.UserService;
 
 @Controller
  public class CreateReportController {
 	@Autowired
-	TaxReportRepository taxReportRepository;
+	TaxReportService taxReportService;
     @Autowired
     UserService userService;
+    
+    // constants page address
+    private final String CREATE_REPORT_PAGE 	= "create_report";
+    private final String CORRECT_REPORT_PAGE 	= "correct_report";
+    private final String STATISTIC_REPORTS_PAGE = "statistic_reports";
+    // constants attributes
+    private final String TAX_REPORT_FORM 		= "taxReportForm";
+    private final String REPORT_ID_ATTRIBUTE 	= "reportId";
+    private final String CORRECT_COMMAND 		= "correct";
 	
-	@GetMapping( "/create_report" )
+	@GetMapping( "/" + CREATE_REPORT_PAGE )
 	public String main( Model model )
 	{
-        model.addAttribute("taxReportForm", new TaxReport() );
+        model.addAttribute( TAX_REPORT_FORM, new TaxReport() );
 
-		return "create_report";		
+		return CREATE_REPORT_PAGE;		
 	}
 	
-	@PostMapping( "/create_report" )
-	public String add( @ModelAttribute("taxReportForm")
+	@PostMapping( "/" + CREATE_REPORT_PAGE )
+	public String add( @ModelAttribute( TAX_REPORT_FORM )
 					   @Valid TaxReport taxReport,
 						BindingResult 	bindingResult,
 						Model 			model ) {
 
         if ( bindingResult.hasErrors() ) {
-            return "create_report";
+            return CREATE_REPORT_PAGE;
         }
         
 		// TODO: check values, inputed by USER
-		taxReport.setStatus( "on_review" );
-		taxReport.setController( userService.getController( "" ) );
-		taxReport.setOwner( UserService.getCurrentUserId() );
+        taxReportService.saveNewTaxReport( taxReport );
 
-		taxReportRepository.save( taxReport );
-
-		return "redirect:/create_report";
+		return "redirect:/" + CREATE_REPORT_PAGE;
 	}
 
-	@GetMapping( "/correct_report/{reportId}" )
-	public String startCorrectReport( @PathVariable("reportId")
+	@GetMapping( "/" + CORRECT_REPORT_PAGE + "/{" + REPORT_ID_ATTRIBUTE + "}" )
+	public String startCorrectReport( @PathVariable( REPORT_ID_ATTRIBUTE )
 									   Integer reportId,
 									   Model model )
 	{
-    	Optional<TaxReport> optionalTaxReport = Optional.of(
-    			taxReportRepository.findTaxReportById( reportId ) );
-
-		if ( !optionalTaxReport.isPresent() ) {
-			throw new RuntimeException( "TaxReport with id: "
-					+ reportId + " not found" );
+		TaxReport taxReport = null;
+		
+		try {
+			taxReport = taxReportService.getTaxReportById( reportId );
+		} catch ( NoTaxReportException exc ) {
+			// TODO: output message by view, redirect to error page
 		}
-		
-		TaxReport taxReport = optionalTaxReport.get();
 
-		model.addAttribute( "taxReportForm", taxReport );
-		model.addAttribute( "command", "correct" );
+		model.addAttribute( TAX_REPORT_FORM, taxReport );
+		model.addAttribute( "command", CORRECT_COMMAND );
 		
-		return "create_report";		
+		return CREATE_REPORT_PAGE;		
 	}
 	
-	@PostMapping( "/correct_report/{reportId}" )
-	public String correctReport( @PathVariable("reportId")
+	@PostMapping( "/" + CORRECT_REPORT_PAGE + "/{" + REPORT_ID_ATTRIBUTE + "}" )
+	public String correctReport( @PathVariable( REPORT_ID_ATTRIBUTE )
 								  Integer reportId,
-							    @ModelAttribute("taxReportForm")
+							    @ModelAttribute( TAX_REPORT_FORM )
 							    @Valid TaxReport taxReport,
 								 BindingResult 	bindingResult,
 								 Model 			model ) {
 
 		if ( bindingResult.hasErrors() ) {
-			return "create_report";
+			return "redirect:/" + CORRECT_REPORT_PAGE + "/" + reportId;
 		}
 
 		// TODO: check values, inputed by USER
-
-		taxReport.setStatus( "on_review" );
-		taxReport.setComment( null );
-		taxReportRepository.save( taxReport );
+		taxReportService.saveCorrectedTaxReport( taxReport );
 		
-		return "redirect:/statistic_reports";
+		return "redirect:/" + STATISTIC_REPORTS_PAGE;
 	}
 }

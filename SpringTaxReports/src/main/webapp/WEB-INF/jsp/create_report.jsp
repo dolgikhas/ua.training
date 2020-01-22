@@ -36,38 +36,55 @@
 			<form:input type="hidden" path="id" value="${id}"></form:input>
 			
 			<label><locale:message code="create_report.pib"/></label><br>
-			<form:input type="text" path="pib" autofocus="true"></form:input><br>
-<!--
-			<form:errors path="pib"></form:errors>
-		    ${pibError}
--->
+			
+			<form:input type="text" path="pib"
+				pattern="[А-ЩЬЮЯҐІЇЄа-щьюяґіїє'\sА-А-ЩЮЯІЇЄ.А-ЩЮЯІЇЄ.]{1,25}"
+				placeholder="Прізвище І.Б."
+				autofocus="true"></form:input><br>
 		
 			<label><locale:message code="create_report.identnumber"/></label><br>
-			<form:input type="text" path="identnumber" value="${identnumber}"></form:input><br>
+			<form:input type="number" min="10000000" max="9999999999"
+				path="identnumber" value="${identnumber}"></form:input><br>
 			
      		<label><locale:message code="create_report.taxdepartment"/></label><br>
-			<form:input type="text" path="taxdepartment" value="${taxdepartment}"></form:input><br>
+			<form:input type="number" min="1" max="999" path="taxdepartment"
+				value="${taxdepartment}"></form:input><br>
 
      		<label><locale:message code="create_report.adress"/></label><br>
-			<form:input type="text" path="adress" value="${adress}"></form:input><br>
+			<form:input type="text" path="adress"
+				pattern="[А-ЩЬЮЯҐІЇЄа-щьюяґіїє'\s.,0-9]{1,25}"			
+				value="${adress}"></form:input><br>
 
      		<label><locale:message code="create_report.workers"/></label><br>
-			<form:input type="text" path="workers" value="${workers}"></form:input><br>
+			<form:input type="number" min="1" max="99999" path="workers"
+				value="${workers}"></form:input><br>
 
      		<label><locale:message code="create_report.taxgroup"/></label><br>
-			<form:input type="text" path="taxgroup" value="${taxgroup}"></form:input><br>
+			<form:input type="number" min="1" max="3" path="taxgroup"
+				value="${taxgroup}"></form:input><br>
 
      		<label><locale:message code="create_report.taxperiod"/></label><br>
-			<form:input type="text" path="taxperiod" value="${taxperiod}"></form:input><br>
+			<form:input type="tel" pattern="\d\d\d\d, \d" placeholder="####, #"
+				path="taxperiod" value="${taxperiod}"></form:input><br>
 
      		<label><locale:message code="create_report.taxdate"/></label><br>
-			<form:input type="text" path="taxdate" value="${taxdate}"></form:input><br>
+			<c:if test="${taxdate != 0}">
+				<form:input type="date" min="2020-01-01" max="2020-12-01"
+					path="taxdate" value="${taxdate}"></form:input><br>
+			</c:if>
+			<c:if test="${taxdate == 0}">
+				<form:input type="date" min="2020-01-01" max="2020-12-01"
+					path="taxdate" value="2020-01-01"></form:input><br>
+			</c:if>
+			
 
      		<label><locale:message code="create_report.taxcode"/></label><br>
-			<form:input type="text" path="taxcode" value="${taxcode}"></form:input><br>
+			<form:input type="tel" pattern="\d\d.\d\d" placeholder="##.##"
+				path="taxcode" value="${taxcode}"></form:input><br>
 
      		<label><locale:message code="create_report.taxincome"/></label><br>
-			<form:input type="text" path="taxincome" value="${taxincome}"></form:input><br>
+			<form:input type="number" min="1" max="99999999" path="taxincome" value="${taxincome}"></form:input><br>
+			
 
 			<form:input type="hidden" path="controller" value="${controller}"></form:input><br>
 			<form:input type="hidden" path="owner" value="${owner}"></form:input>

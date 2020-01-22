@@ -9,30 +9,7 @@
   <title><locale:message code="login.title"/></title>
 </head>
 
-<body>
-	<!--
-	<script>
-		alert( 'Привет, мир!' );
-	</script>
-
-	<!--
-	<style>
-	.button {
-	  display: inline-block;
-	  font-size: 18px;
-	  cursor: pointer;
-	  text-align: center;
-	  text-decoration: none;
-	  outline: none;
-	  color: #fff;
-	  background-color: #e7e7e7; color: black; /* Gray */
-	  border: 1px solid #555555; /* Black */
-	  border-radius: 12px;
-	  width: 160px;
-	}	
-	</style>
-	-->
-	
+<body>	
 	<form:form method="POST" modelAttribute="userForm" action="change-locale"
 	          class="box login">	 
 		<fieldset class="boxBody">	 
@@ -56,17 +33,14 @@
 			<label><locale:message code="login.password"/></label><br>	    
 			<input name="password" type="password" placeholder="Password"/><br>
 			<button type="submit" class="button">
-				<locale:message code="login.button"/></span>
+				<!--<font size="2"><locale:message code="login.button"/></font>	-->
+				<locale:message code="login.button"/>
 			</button><br>
 		
-		
-		    <!--	<input type="button" value=<locale:message code="index.registration"/>
-				onClick='location.href="/registration"'/><br>	-->
 			<button type="submit" onClick='location.href="/registration"'
 					class="button">
 				<locale:message code="index.registration"/>
-			</button><br>
-				    
+			</button><br>				    
 	    </div>
 	  </form>
 	</div>

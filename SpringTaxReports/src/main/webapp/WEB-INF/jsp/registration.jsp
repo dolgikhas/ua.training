@@ -37,11 +37,18 @@
 			   	<form:errors path="password"></form:errors>
 			        ${passwordError}
 			</div>
-	    	<button type="submit"><locale:message code="registration.button"/></button>
+	    	<button type="submit">
+	    		<font size="2"><locale:message code="registration.button"/></font>
+	    	</button>
 		</form:form>
-	    <!--	<a href="/"><locale:message code="index.title"/></a>	-->
-	    <input type="button" value=<locale:message code="index.title"/>
-			onClick='location.href="/"'/><br>    
+
+	    <!--	<input type="button" value=<locale:message code="index.title"/>
+			onClick='location.href="/"'/><br>	-->
+		<button type="submit" onClick='location.href="/"'
+				class="button">
+			<font size="2"><locale:message code="index.title"/></font>
+		</button><br>
+
 	</div>
 </body>
 </html>

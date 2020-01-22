@@ -23,10 +23,6 @@
 		<div>
 			<h3>${pageContext.request.userPrincipal.name}</h3>
 			<sec:authorize access="!isAuthenticated()">
-			<!--
-				<h4><a href="/login"><locale:message code="index.login"/></a></h4>
-				<h4><a href="/registration"><locale:message code="index.registration"/></a></h4>
-			-->
 			    <input type="button" value=<locale:message code="index.login"/>
 			    		onClick='location.href="/login"'/><br>    
 			    <input type="button" value=<locale:message code="index.registration"/>
@@ -34,19 +30,19 @@
 			</sec:authorize>			
 			
 			<sec:authorize access="hasRole('ROLE_USER')">
-				<!--	<h4><a href="/create_report">
-					<locale:message code="index.create_report"/></a></h4>	-->
 				<input type="button" value=<locale:message code="index.create_report"/>
 			    		onClick='location.href="/create_report"'/><br> 
+				<input type="button" value=<locale:message code="index.statistic_reports"/>
+			    		onClick='location.href="/statistic_reports_user"'/><br>
+
+			</sec:authorize>
+			<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<input type="button" value=<locale:message code="index.statistic_reports"/>
+			    		onClick='location.href="/statistic_reports_admin"'/><br>
+
 			</sec:authorize>
 			
 			<sec:authorize access="isAuthenticated()">
-			<!--
-				<h4><a href="/statistic_reports"><locale:message code="index.statistic_reports"/></a></h4>
-				<h4><a href="/logout"><locale:message code="index.logout"/></a></h4>
-			-->
-				<input type="button" value=<locale:message code="index.statistic_reports"/>
-			    		onClick='location.href="/statistic_reports"'/><br> 
 				<input type="button" value=<locale:message code="index.logout"/>
 			    		onClick='location.href="/logout"'/><br> 
 			</sec:authorize>

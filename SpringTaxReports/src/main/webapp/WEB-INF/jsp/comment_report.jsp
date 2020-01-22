@@ -30,7 +30,6 @@
 		</div>
 	</form>
     
-    <!--	<a href="/"><locale:message code="index.title"/></a>	-->
     <input type="button" value=<locale:message code="index.title"/>
 		onClick='location.href="/"'/><br>    
 </div>

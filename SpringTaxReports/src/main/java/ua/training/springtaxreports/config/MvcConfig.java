@@ -19,7 +19,9 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/create_report").setViewName("create_report");
         registry.addViewController("/correct_report").setViewName("create_report");
         registry.addViewController("/comment_report").setViewName("comment_report");
-        registry.addViewController("/statistic_reports").setViewName("statistic_reports");
+//        registry.addViewController("/statistic_reports").setViewName("statistic_reports");
+        registry.addViewController("/statistic_reports_admin").setViewName("statistic_reports_admin");
+        registry.addViewController("/statistic_reports_user").setViewName("statistic_reports_user");
 	}
     
     @Override
